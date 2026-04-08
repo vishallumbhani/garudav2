@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Garuda Admin Console</title>
+    <style>
+        body { font-family: monospace; margin: 2rem; background: #f5f5f5; }
+        .card { background: white; border-radius: 8px; padding: 1.5rem; margin-bottom: 1.5rem; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        table { border-collapse: collapse; width: 100%; margin-top: 1rem; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+        th { background: #4CAF50; color: white; }
+        pre { background: #f4f4f4; padding: 1rem; overflow-x: auto; border-radius: 4px; }
+        input, button { padding: 0.5rem; margin: 0.25rem; font-size: 1rem; }
+        button { background: #4CAF50; color: white; border: none; cursor: pointer; border-radius: 4px; }
+        button:hover { background: #45a049; }
+        .error { color: red; }
+        .nav { margin-bottom: 1rem; }
+        .nav button { background: #008CBA; margin-right: 0.5rem; }
+    </style>
+</head>
+<body>
+    <h1>Garuda Admin Console</h1>
+    <div class="card">
+        <label>Admin API Key: <input type="password" id="apiKey" style="width: 300px;" placeholder="Enter your admin API key"></label>
+        <button onclick="loadAll()">Load Data</button>
+        <div id="status"></div>
+    </div>
+    <div class="nav">
+        <button onclick="showSection('rules')">Rules</button>
+        <button onclick="showSection('policies')">Policies</button>
+        <button onclick="showSection('tenants')">Tenants</button>
+        <button onclick="showSection('apikeys')">API Keys</button>
+    </div>
+    <div id="rules" class="card" style="display:none;"><h2>Rules</h2><pre id="rulesData">Loading...</pre></div>
+    <div id="policies" class="card" style="display:none;"><h2>Policies</h2><pre id="policiesData">Loading...</pre></div>
+    <div id="tenants" class="card" style="display:none;"><h2>Tenant Config</h2><pre id="tenantsData">Loading...</pre></div>
+    <div id="apikeys" class="card" style="display:none;"><h2>API Keys</h2><pre id="apikeysData">Loading...</pre></div>
+
+    <script>
+        let currentKey = '';
+
+        async function fetchJSON(url) {
+            const res = await fetch(url, {
+                headers: { 'X-API-Key': currentKey }
+            });
+            if (!res.ok) throw new Error(await res.text());
+            return res.json();
+        }
+
+        async function loadAll() {
+            currentKey = document.getElementById('apiKey').value;
+            if (!currentKey) {
+                document.getElementById('status').innerHTML = '<div class="error">Please enter API key</div>';
+                return;
+            }
+            document.getElementById('status').innerHTML = 'Loading...';
+            try {
+                const rules = await fetchJSON('/v1/admin/rules');
+                document.getElementById('rulesData').innerHTML = JSON.stringify(rules, null, 2);
+                document.getElementById('status').innerHTML = 'Data loaded successfully';
+            } catch(e) {
+                document.getElementById('status').innerHTML = `<div class="error">Error: ${e.message}</div>`;
+            }
+            try {
+                const policies = await fetchJSON('/v1/admin/policies');
+                document.getElementById('policiesData').innerHTML = JSON.stringify(policies, null, 2);
+            } catch(e) { document.getElementById('policiesData').innerHTML = `Error: ${e.message}`; }
+            try {
+                const tenants = await fetchJSON('/v1/admin/tenants/11111111-1111-1111-1111-111111111111');
+                document.getElementById('tenantsData').innerHTML = JSON.stringify(tenants, null, 2);
+            } catch(e) { document.getElementById('tenantsData').innerHTML = `Error: ${e.message}`; }
+            try {
+                const keys = await fetchJSON('/v1/admin/api-keys');
+                document.getElementById('apikeysData').innerHTML = JSON.stringify(keys, null, 2);
+            } catch(e) { document.getElementById('apikeysData').innerHTML = `Error: ${e.message}`; }
+        }
+
+        function showSection(section) {
+            document.querySelectorAll('.card').forEach(card => card.style.display = 'none');
+            document.getElementById(section).style.display = 'block';
+        }
+
+        // Optional: show first section after load
+        window.loadAll = loadAll;
+        window.showSection = showSection;
+    </script>
+</body>
+</html>

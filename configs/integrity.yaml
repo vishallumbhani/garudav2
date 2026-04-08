@@ -1,0 +1,3 @@
+startup:
+  fail_on_critical_missing: false
+  fail_on_checksum_mismatch: false

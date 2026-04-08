@@ -1,0 +1,165 @@
+critical_patterns:
+- pattern: (?i)(ignore|disregard|forget) previous instructions
+  severity: 0.95
+  type: critical
+- pattern: (?i)reveal (system|base) prompt
+  severity: 0.95
+  type: critical
+- pattern: (?i)-----BEGIN (RSA|OPENSSH|DSA|EC) PRIVATE KEY-----
+  severity: 0.95
+  type: critical
+- pattern: (?i)Bearer [A-Za-z0-9_\-\.]{20,}
+  severity: 0.95
+  type: critical
+- pattern: sk-[A-Za-z0-9]{32,}
+  severity: 0.95
+  type: critical
+- pattern: '(?i)(api[_-]?key|token)[=: ]+[A-Za-z0-9]{10,}'
+  severity: 0.95
+  type: critical
+- pattern: (?i)pretend (you are|to be|you're)
+  severity: 0.8
+  type: critical
+- pattern: (?i)act as (if|though|a)
+  severity: 0.8
+  type: critical
+- pattern: (?i)roleplay as
+  severity: 0.8
+  type: critical
+- pattern: (?i)developer console
+  severity: 0.85
+  type: critical
+- pattern: (?i)debugging mode
+  severity: 0.85
+  type: critical
+- pattern: (?i)reveal internal instructions
+  severity: 0.9
+  type: critical
+- pattern: (?i)bypass authentication
+  severity: 0.8
+  type: critical
+- pattern: (?i)evade moderation
+  severity: 0.75
+  type: critical
+- pattern: (?i)circumvent controls
+  severity: 0.8
+  type: critical
+- pattern: (?i)(bypass|evade|circumvent|avoid|dodge).*?(auth|security|filter|restriction|control)
+  severity: 0.85
+  type: critical
+- pattern: (?i)(exfiltrate|leak|steal|export|copy).*?(data|files|keys|records|secrets|database)
+  severity: 0.9
+  type: critical
+- pattern: (?i)(without detection|covert|quietly|secretly|hidden|stealth)
+  severity: 0.8
+  type: critical
+- pattern: (?i)copy sensitive files without detection
+  severity: 0.9
+  type: critical
+- pattern: (?i)move confidential data quietly
+  severity: 0.85
+  type: critical
+- pattern: (?i)export records covertly
+  severity: 0.85
+  type: critical
+- pattern: (?i)steal files silently
+  severity: 0.9
+  type: critical
+- pattern: (?i)hide stolen data
+  severity: 0.85
+  type: critical
+- pattern: (?i)covert transfer
+  severity: 0.8
+  type: critical
+- pattern: (?i)without detection.*?files
+  severity: 0.85
+  type: critical
+- pattern: (?i)without detection.*?data
+  severity: 0.85
+  type: critical
+- pattern: (?i)copy sensitive files without detection
+  severity: 0.9
+  type: critical
+- pattern: (?i)move confidential data quietly
+  severity: 0.85
+  type: critical
+- pattern: (?i)export records covertly
+  severity: 0.85
+  type: critical
+- pattern: (?i)steal files silently
+  severity: 0.9
+  type: critical
+- pattern: (?i)hide stolen data
+  severity: 0.85
+  type: critical
+- pattern: (?i)covert transfer
+  severity: 0.8
+  type: critical
+- pattern: (?i)without detection.*?files
+  severity: 0.85
+  type: critical
+- pattern: (?i)without detection.*?data
+  severity: 0.85
+  type: critical
+- pattern: (?i)copy sensitive files without detection
+  severity: 0.9
+  type: critical
+- pattern: (?i)copy confidential files quietly
+  severity: 0.85
+  type: critical
+- pattern: (?i)move sensitive files covertly
+  severity: 0.85
+  type: critical
+- pattern: (?i)export records without alerting defenders
+  severity: 0.85
+  type: critical
+- pattern: (?i)copy files silently
+  severity: 0.8
+  type: critical
+- pattern: (?i)move confidential data without detection
+  severity: 0.85
+  type: critical
+- pattern: (?i)steal files covertly
+  severity: 0.9
+  type: critical
+sensitive_patterns:
+- pattern: (?i)password
+  severity: 0.6
+  type: sensitive
+- pattern: (?i)secret
+  severity: 0.6
+  type: sensitive
+- pattern: (?i)api[_-]?key
+  severity: 0.6
+  type: sensitive
+- pattern: (?i)token
+  severity: 0.6
+  type: sensitive
+- pattern: (?i)ssh-rsa
+  severity: 0.6
+  type: sensitive
+- pattern: (?i)credit card
+  severity: 0.6
+  type: sensitive
+- pattern: (?i)social security
+  severity: 0.6
+  type: sensitive
+- pattern: (?i)extract API keys
+  severity: 0.7
+  type: sensitive
+- pattern: (?i)export customer data
+  severity: 0.7
+  type: sensitive
+- pattern: (?i)steal (database|secrets|credentials)
+  severity: 0.75
+  type: sensitive
+warning_patterns:
+- pattern: (?i)confidential
+  severity: 0.3
+  type: warning
+- pattern: (?i)internal use only
+  severity: 0.3
+  type: warning
+- pattern: (?i)do not share
+  severity: 0.3
+  type: warning

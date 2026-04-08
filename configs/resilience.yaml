@@ -1,0 +1,7 @@
+circuit_breaker:
+  failure_threshold: 3
+  open_timeout_seconds: 60
+
+degraded_mode:
+  fallback_engines: ["bhishma", "shakuni"]
+  disable_redis_on_error: true

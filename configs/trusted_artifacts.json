@@ -1,0 +1,39 @@
+{
+  "artifacts": {
+    "src/engines/arjuna/arjuna_model.pkl": {
+      "sha256": "c70ac2ef848399e7e614ec3c4c1daae6a5be23ebeb3b32e4b913871200cbdb1f",
+      "size": 64751,
+      "version": "1.0"
+    },
+    "src/engines/arjuna/arjuna_vectorizer.pkl": {
+      "sha256": "9780fc9c61e9cb54f4f3040c53d5351b230d482efe84e1b16c0dc351de624de1",
+      "size": 85898,
+      "version": "1.0"
+    },
+    "src/engines/arjuna/arjuna_label_map.json": {
+      "sha256": "b530467ac6aecf15d73245433d04ddf34e1b4197569f1f0831fddd62b556e285",
+      "size": 90,
+      "version": "1.0"
+    },
+    "src/engines/bhishma/rules.yaml": {
+      "sha256": "ee77d7c1b74e61452e4d506718abeafc33f4bb082e3c16e90da75806c136b01d",
+      "size": 4115,
+      "version": "1.0"
+    },
+    "src/engines/shakuni/rules.yaml": {
+      "sha256": "e882da8ead42468545617e1194363c2a68a7dee84f68c51c346482ae8dfd40c1",
+      "size": 944,
+      "version": "1.0"
+    },
+    "configs/resilience.yaml": {
+      "sha256": "ba2a6deba6ff337d57626b75d3355e44f177e1a3dcb4eb9e00b46f24ad184826",
+      "size": 157,
+      "version": "1.0"
+    },
+    "configs/integrity.yaml": {
+      "sha256": "e46f530745e729039bbdd12362027d2b3153db1bf473a40966c0e6b56f8a14b8",
+      "size": 78,
+      "version": "1.0"
+    }
+  }
+}

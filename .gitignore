@@ -1,0 +1,138 @@
+# Python
+venv/
+env/
+ENV/
+__pycache__/
+*.py[cod]
+*.so
+.Python
+*.egg-info/
+dist/
+build/
+*.pyc
+*.pyo
+
+# Backend specific
+src/api/__pycache__/
+src/auth/__pycache__/
+src/core/__pycache__/
+src/db/__pycache__/
+src/engines/*/__pycache__/
+src/playbooks/__pycache__/
+src/protection/__pycache__/
+src/resilience/__pycache__/
+src/schemas/__pycache__/
+src/services/__pycache__/
+src/tests/__pycache__/
+src/utils/__pycache__/
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+garuda_db_backup.sql
+garuda_db_backup_*.sql
+
+# Logs
+logs/*.log
+logs/*.jsonl
+logs/*.backup
+logs/systemd*.log
+logs/audit.pre_hash_chain_backup.jsonl
+
+# Data directories (large, generated, sensitive)
+data/ml/sources/
+data/ml/sources_being/
+data/processed/
+data/quarantine/*        # but keep the directory itself
+!data/quarantine/.gitkeep
+data/uploads/*           # but keep the directory
+!data/uploads/.gitkeep
+
+# Models (may be large, but keep if versioned? Usually ignore)
+models/*.pkl
+models/*.json
+# If you need to keep label maps, adjust:
+!models/arjuna_label_map.json   # optional
+
+# Frontend
+frontend/node_modules/
+frontend/dist/
+frontend/.vite/
+frontend/src_old/               # old backup directory
+frontend/*.log
+frontend/.env
+frontend/.env.local
+frontend/.env.*.local
+
+# Build outputs
+*.tar.gz
+*.zip
+*.tgz
+
+# IDE and OS files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# Backup and temporary files
+*.bak
+*.backup
+*.tmp
+*.temp
+*.orig
+*.rej
+*_backup
+*.pkl.bak
+*.py.bak
+*~backup
+README_RESTORE.md   # if generated from backup
+
+# Secrets and config overrides
+.env
+.env.*
+*.pem
+*.key
+*.crt
+configs/trusted_artifacts.sig   # signature file can be regenerated
+# But keep trusted_artifacts.json (manifest) if needed
+
+# Test results (optional, but may be large)
+test_results/*.csv
+test_results/*.json
+test_results/*.txt
+test_screenshot.png
+
+# Documentation build (if any)
+docs/_build/
+
+# Static HTML from dashboard (generated, but you may keep if hand-crafted)
+# static/*.html   # uncomment if you want to ignore
+
+# ML dataset backups
+data/ml/old/
+data/ml/final/   # if this contains generated data
+
+# Misc
+benign.pdf
+simple.pdf
+suspicious.pdf
+test.*
+*.log
+*.csv
+*.docx
+*.json
+*.parquet
+*.pth
+
+# but keep small config files
+!configs/*.yaml
+!configs/*.json
+
+# Keep necessary source files
+!src/engines/*/rules.yaml
+!src/engines/*/arjuna_label_map.json

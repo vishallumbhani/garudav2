@@ -1,0 +1,32 @@
+# Shakuni deception rules
+roleplay_patterns:
+  - "pretend (you are|to be|you're)"
+  - "act as (if|though|a)"
+  - "assume the role of"
+  - "you are now (an?|a) AI"
+  - "from now on, (you are|act as)"
+
+hypothetical_patterns:
+  - "for (testing|educational|research) purposes"
+  - "hypothetically"
+  - "in a fictional scenario"
+  - "imagine (that|if)"
+  - "this is a test"
+
+split_instruction_patterns:
+  - "ignore (previous|above) (instructions|commands)"
+  - "disregard (the|all) (previous|above)"
+  - "forget (previous|all) instructions"
+  - "new instruction:"
+
+indirect_bypass_patterns:
+  - "I'm (a|an) (researcher|hacker|attacker|developer)"
+  - "this is (a|an) (penetration|security) test"
+  - "we are (a|an) (red team|blue team)"
+  - "for (academic|scientific) purposes"
+
+obfuscation_patterns:
+  - "spell it (backwards|in reverse)"
+  - "use (base64|rot13|caesar)"
+  - "encode (the|this) (text|message)"
+  - "reverse (the|this) (string|text)"

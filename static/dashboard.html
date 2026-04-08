@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Garuda Sanjaya Dashboard</title>
+    <style>
+        body { font-family: monospace; margin: 2rem; }
+        .card { border: 1px solid #ccc; padding: 1rem; margin-bottom: 1rem; }
+        .tab { display: inline-block; padding: 0.5rem 1rem; cursor: pointer; background: #f2f2f2; margin-right: 0.5rem; }
+        .tab.active { background: #007bff; color: white; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        table { border-collapse: collapse; width: 100%; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+        th { background: #f2f2f2; }
+        pre { background: #f8f9fa; padding: 0.5rem; overflow-x: auto; }
+    </style>
+</head>
+<body>
+    <h1>Garuda Sanjaya Dashboard</h1>
+    <div>
+        <div class="tab active" data-tab="health">Health</div>
+        <div class="tab" data-tab="timeline">Timeline</div>
+        <div class="tab" data-tab="engines">Engine Outcomes</div>
+        <div class="tab" data-tab="policies">Policy Hits</div>
+        <div class="tab" data-tab="session">Session Lookup</div>
+    </div>
+
+    <div id="health" class="tab-content active"><div class="card">Loading health...</div></div>
+    <div id="timeline" class="tab-content"><div class="card">Loading timeline...</div></div>
+    <div id="engines" class="tab-content"><div class="card">Loading engine outcomes...</div></div>
+    <div id="policies" class="tab-content"><div class="card">Loading policy hits...</div></div>
+    <div id="session" class="tab-content">
+        <div class="card">
+            <input type="text" id="sessionId" placeholder="Enter session ID" style="width: 300px; padding: 0.5rem;">
+            <button onclick="loadSession()">Lookup</button>
+            <div id="sessionResult"></div>
+        </div>
+    </div>
+
+    <script>
+        async function fetchJSON(url) {
+            const res = await fetch(url);
+            if (!res.ok) throw new Error(await res.text());
+            return res.json();
+        }
+
+        async function loadHealth() {
+            try {
+                const data = await fetchJSON('/v1/dashboard/health');
+                document.getElementById('health').innerHTML = `<div class="card"><h2>Health Status</h2><pre>${JSON.stringify(data, null, 2)}</pre></div>`;
+            } catch(e) { document.getElementById('health').innerHTML = `<div class="card">Error: ${e.message}</div>`; }
+        }
+
+        async function loadTimeline() {
+            try {
+                const data = await fetchJSON('/v1/dashboard/timeline?interval=day&limit=14');
+                const table = `<table>
+                    <tr><th>Date</th><th>Total</th><th>Allow</th><th>Monitor</th><th>Challenge</th><th>Block</th></tr>
+                    ${data.data.map(d => `<tr>
+                        <td>${new Date(d.time).toLocaleDateString()}</td>
+                        <td>${d.total}</td>
+                        <td>${d.allow}</td>
+                        <td>${d.monitor}</td>
+                        <td>${d.challenge}</td>
+                        <td>${d.block}</td>
+                    </tr>`).join('')}
+                </table>`;
+                document.getElementById('timeline').innerHTML = `<div class="card"><h2>Audit Timeline (${data.interval})</h2>${table}</div>`;
+            } catch(e) { document.getElementById('timeline').innerHTML = `<div class="card">Error: ${e.message}</div>`; }
+        }
+
+        async function loadEngines() {
+            try {
+                const data = await fetchJSON('/v1/dashboard/engine-outcomes?limit=200');
+                let html = `<h2>Engine Score Distribution</h2><table><tr><th>Engine</th><th>Low</th><th>Medium</th><th>High</th></tr>`;
+                for (const [eng, scores] of Object.entries(data.engine_scores)) {
+                    html += `<tr><td>${eng}</td><td>${scores.low}</td><td>${scores.medium}</td><td>${scores.high}</td></tr>`;
+                }
+                html += `</table><p>Fallback used in ${data.fallback_used_count} of ${data.total_samples} samples.</p>`;
+                document.getElementById('engines').innerHTML = `<div class="card">${html}</div>`;
+            } catch(e) { document.getElementById('engines').innerHTML = `<div class="card">Error: ${e.message}</div>`; }
+        }
+
+        async function loadPolicies() {
+            try {
+                const data = await fetchJSON('/v1/dashboard/policy-hits?limit=100');
+                let table = `<h2>Top Policies</h2><table><tr><th>Policy</th><th>Count</th></tr>`;
+                data.top_policies.forEach(p => { table += `<tr><td>${p.policy}</td><td>${p.count}</td></tr>`; });
+                table += `</table><p>Guardrail hits: ${data.guardrail_hits}<br>Non-overridable blocks: ${data.non_overridable_blocks}<br>Critical secret events: ${data.critical_secret_events}</p>`;
+                document.getElementById('policies').innerHTML = `<div class="card">${table}</div>`;
+            } catch(e) { document.getElementById('policies').innerHTML = `<div class="card">Error: ${e.message}</div>`; }
+        }
+
+        async function loadSession() {
+            const sessionId = document.getElementById('sessionId').value.trim();
+            if (!sessionId) return;
+            try {
+                const data = await fetchJSON(`/v1/dashboard/session/${sessionId}`);
+                const historyTable = `<table><tr><th>Time</th><th>Decision</th><th>Score</th><th>Escalation</th><th>Weighted Risk</th></tr>
+                ${data.history.map(h => `<tr>
+                    <td>${new Date(h.timestamp).toLocaleString()}</td>
+                    <td>${h.decision}</td>
+                    <td>${h.score}</td>
+                    <td>${h.escalation_factor || '-'}</td>
+                    <td>${h.weighted_risk || '-'}</td>
+                </tr>`).join('')}
+                </table>`;
+                document.getElementById('sessionResult').innerHTML = `
+                    <h3>Session ${sessionId}</h3>
+                    <p>Total requests: ${data.total_requests}<br>Classification: ${data.classification}<br>Escalation factor: ${data.escalation_factor}</p>
+                    <p>Decisions: Allow ${data.decisions.allow}, Monitor ${data.decisions.monitor}, Challenge ${data.decisions.challenge}, Block ${data.decisions.block}</p>
+                    ${historyTable}
+                `;
+            } catch(e) { document.getElementById('sessionResult').innerHTML = `<div class="error">Error: ${e.message}</div>`; }
+        }
+
+        // Tab switching
+        document.querySelectorAll('.tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+                tab.classList.add('active');
+                document.getElementById(tab.dataset.tab).classList.add('active');
+                if (tab.dataset.tab === 'health') loadHealth();
+                if (tab.dataset.tab === 'timeline') loadTimeline();
+                if (tab.dataset.tab === 'engines') loadEngines();
+                if (tab.dataset.tab === 'policies') loadPolicies();
+            });
+        });
+
+        // Load initial health
+        loadHealth();
+    </script>
+</body>
+</html>

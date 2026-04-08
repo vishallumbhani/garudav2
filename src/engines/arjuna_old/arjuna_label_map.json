@@ -1,0 +1,1 @@
+{"benign": 0, "prompt_injection": 1, "policy_bypass": 2, "data_exfiltration": 3}
